@@ -155,6 +155,11 @@ export default function Hero() {
                 className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium bg-white/[0.04] border border-white/[0.07] text-slate-400 hover:text-white hover:border-indigo-500/30 hover:bg-indigo-500/[0.06] transition-all">
                 <LinkedinIcon size={12} /><span className="text-indigo-400">LinkedIn</span>
               </a>
+              <a href="https://amitk1420.vercel.app" target="_blank" rel="noopener noreferrer"
+                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium bg-white/[0.04] border border-white/[0.07] text-slate-400 hover:text-white hover:border-cyan-500/30 hover:bg-cyan-500/[0.06] transition-all">
+                <span className="text-cyan-400 text-[10px]">◈</span>
+                <span className="text-cyan-400">amitk1420.vercel.app</span>
+              </a>
             </motion.div>
 
             <motion.div {...fu(0.35)} className="flex flex-wrap justify-center lg:justify-start gap-3">

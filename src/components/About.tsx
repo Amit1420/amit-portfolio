@@ -67,15 +67,35 @@ export default function About() {
 
           <motion.div className="space-y-4" {...fu(0.2)}>
             {[
-              { icon: <Briefcase size={18} />, color: 'indigo', title: 'Current Role',
-                body: <>Software Engineer II at <span className="text-slate-200 font-medium">KIBA Labs</span>, working as SAP CAP Consultant for SAP Labs — building cloud-native Utilities applications on SAP BTP.</> },
-              { icon: <GraduationCap size={18} />, color: 'violet', title: 'Education',
-                body: <><span className="text-slate-300">{education.degree}</span><br /><span className="text-slate-500 text-xs">{education.institution} · {education.period}</span></> },
-              { icon: <Award size={18} />, color: 'yellow', title: 'Recognition',
-                body: <>Employee of the Year 2026 &amp; Platinum Award at KIBA Labs for outstanding enterprise cloud delivery and client satisfaction.</> },
+              {
+                icon: <Briefcase size={18} />,
+                border: '#6366f1',
+                iconBg: 'rgba(99,102,241,0.12)',
+                iconColor: '#a5b4fc',
+                title: 'Current Role',
+                body: <>Software Engineer II at <span className="text-slate-200 font-medium">KIBA Labs</span>, working as SAP CAP Consultant for SAP Labs — building cloud-native Utilities applications on SAP BTP.</>
+              },
+              {
+                icon: <GraduationCap size={18} />,
+                border: '#8b5cf6',
+                iconBg: 'rgba(139,92,246,0.12)',
+                iconColor: '#c4b5fd',
+                title: 'Education',
+                body: <><span className="text-slate-300">{education.degree}</span><br /><span className="text-slate-500 text-xs">{education.institution} · {education.period}</span></>
+              },
+              {
+                icon: <Award size={18} />,
+                border: '#f59e0b',
+                iconBg: 'rgba(245,158,11,0.12)',
+                iconColor: '#fcd34d',
+                title: 'Recognition',
+                body: <>Employee of the Year 2026 &amp; Platinum Award at KIBA Labs for outstanding enterprise cloud delivery and client satisfaction.</>
+              },
             ].map((card) => (
-              <div key={card.title} className="card p-5 flex gap-4 group">
-                <div className={`w-10 h-10 rounded-xl bg-${card.color}-500/10 flex items-center justify-center shrink-0 text-${card.color}-400 group-hover:bg-${card.color}-500/15 transition-colors`}>
+              <div key={card.title} className="card p-5 flex gap-4 group"
+                style={{ borderLeft: `3px solid ${card.border}` }}>
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-colors"
+                  style={{ background: card.iconBg, color: card.iconColor }}>
                   {card.icon}
                 </div>
                 <div>
