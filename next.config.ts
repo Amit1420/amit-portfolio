@@ -1,7 +1,14 @@
 import type { NextConfig } from "next";
 
+const sections = ['about','skills','experience','projects','awards','appreciation','contact']
+
 const nextConfig: NextConfig = {
-  /* config options here */
-};
+  async rewrites() {
+    return sections.map(id => ({
+      source: `/${id}`,
+      destination: '/',
+    }))
+  },
+}
 
 export default nextConfig;
