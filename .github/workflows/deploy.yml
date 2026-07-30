@@ -29,16 +29,25 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Deploy to Vercel (Preview) on PR
-        if: github.event_name == 'pull_request'
-        run: npx vercel --token ${{ secrets.VERCEL_TOKEN }} --yes
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+
+      - name: Pull Vercel environment
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
-      - name: Deploy to Vercel (Production) on merge to main
+      - name: Deploy Preview (on PR)
+        if: github.event_name == 'pull_request'
+        run: vercel deploy --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+      - name: Deploy Production (on merge to main)
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        run: npx vercel --token ${{ secrets.VERCEL_TOKEN }} --prod --yes
+        run: vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
