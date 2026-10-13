@@ -4,6 +4,8 @@ import { motion } from 'framer-motion'
 import { experiences } from '@/lib/data'
 import { Building2, Calendar, MapPin } from 'lucide-react'
 
+const MAX_TAGS = 6
+
 export default function Experience() {
   return (
     <section id="experience" className="py-28 px-6 relative overflow-hidden"
@@ -81,7 +83,12 @@ export default function Experience() {
                           </div>
                         )}
                         <div className="flex flex-wrap gap-1.5 mb-4">
-                          {role.techStack.map((t) => <span key={t} className="tag">{t}</span>)}
+                          {role.techStack.slice(0, MAX_TAGS).map((t) => <span key={t} className="tag">{t}</span>)}
+                          {role.techStack.length > MAX_TAGS && (
+                            <span className="tag" title={role.techStack.slice(MAX_TAGS).join(', ')}>
+                              +{role.techStack.length - MAX_TAGS}
+                            </span>
+                          )}
                         </div>
                         <ul className="space-y-2">
                           {role.bullets.map((b, i) => (

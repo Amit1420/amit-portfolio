@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next'
 
+// Single-page site: section anchors are not separate documents, so only the root is listed.
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {
@@ -7,24 +8,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 1,
-    },
-    {
-      url: 'https://amitk1420.vercel.app/#about',
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-    {
-      url: 'https://amitk1420.vercel.app/#experience',
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.9,
-    },
-    {
-      url: 'https://amitk1420.vercel.app/#projects',
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.7,
     },
   ]
 }

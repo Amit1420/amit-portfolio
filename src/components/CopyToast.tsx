@@ -8,15 +8,21 @@ export default function CopyToast() {
   const [show, setShow] = useState(false)
 
   useEffect(() => {
+    let timer: ReturnType<typeof setTimeout>
     const handler = () => {
       setShow(true)
-      setTimeout(() => setShow(false), 2500)
+      clearTimeout(timer) // repeated copies restart the timer instead of stacking
+      timer = setTimeout(() => setShow(false), 2500)
     }
     window.addEventListener('email-copied', handler)
-    return () => window.removeEventListener('email-copied', handler)
+    return () => {
+      clearTimeout(timer)
+      window.removeEventListener('email-copied', handler)
+    }
   }, [])
 
   return (
+    <div role="status" aria-live="polite">
     <AnimatePresence>
       {show && (
         <motion.div
@@ -34,5 +40,6 @@ export default function CopyToast() {
         </motion.div>
       )}
     </AnimatePresence>
+    </div>
   )
 }

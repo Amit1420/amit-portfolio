@@ -3,20 +3,11 @@
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { useState, useEffect } from 'react'
+import LinkedinIcon from './LinkedinIcon'
 import { profile, stats } from '@/lib/data'
 import { Mail, MapPin, ArrowDown, Copy, Check, Download } from 'lucide-react'
 import CountUp from './CountUp'
 import HeroParticles from './HeroParticles'
-
-function LinkedinIcon({ size = 12 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
-      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-      <rect x="2" y="9" width="4" height="12" />
-      <circle cx="4" cy="4" r="2" />
-    </svg>
-  )
-}
 
 const TITLES = ['Software Engineer II', 'SAP BTP Specialist', 'Java Cloud Developer', 'SAP CAP Consultant']
 
@@ -24,34 +15,27 @@ function TypewriterTitle() {
   const [idx, setIdx] = useState(0)
   const [displayed, setDisplayed] = useState('')
   const [deleting, setDeleting] = useState(false)
-  const [paused, setPaused] = useState(false)
 
+  // Every state change is scheduled via a timer, so the effect never sets state synchronously
   useEffect(() => {
-    if (paused) {
-      const t = setTimeout(() => { setPaused(false); setDeleting(true) }, 2000)
-      return () => clearTimeout(t)
-    }
     const target = TITLES[idx]
+    let t: ReturnType<typeof setTimeout>
     if (!deleting) {
-      if (displayed.length < target.length) {
-        const t = setTimeout(() => setDisplayed(target.slice(0, displayed.length + 1)), 60)
-        return () => clearTimeout(t)
-      } else { setPaused(true) }
+      t = displayed.length < target.length
+        ? setTimeout(() => setDisplayed(target.slice(0, displayed.length + 1)), 60)
+        : setTimeout(() => setDeleting(true), 2000)
     } else {
-      if (displayed.length > 0) {
-        const t = setTimeout(() => setDisplayed(displayed.slice(0, -1)), 30)
-        return () => clearTimeout(t)
-      } else {
-        setDeleting(false)
-        setIdx((i) => (i + 1) % TITLES.length)
-      }
+      t = displayed.length > 0
+        ? setTimeout(() => setDisplayed(displayed.slice(0, -1)), 30)
+        : setTimeout(() => { setDeleting(false); setIdx((i) => (i + 1) % TITLES.length) }, 0)
     }
-  }, [displayed, deleting, idx, paused])
+    return () => clearTimeout(t)
+  }, [displayed, deleting, idx])
 
   return (
-    <span className="gradient-text">
-      {displayed}
-      <span className="animate-pulse text-indigo-400">|</span>
+    <span className="gradient-text" role="text" aria-label={TITLES.join(', ')}>
+      <span aria-hidden>{displayed}</span>
+      <span aria-hidden className="animate-pulse text-indigo-400">|</span>
     </span>
   )
 }
@@ -97,7 +81,7 @@ export default function Hero() {
       <div className="relative z-10 max-w-4xl w-full">
         <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
 
-          <motion.div {...fu(0)} className="flex-shrink-0 flex flex-col items-center gap-4">
+          <motion.div {...fu(0)} className="flex-shrink-0 flex flex-col items-center">
             <div className="relative group">
               <div className="absolute -inset-1.5 rounded-full opacity-70 group-hover:opacity-100 transition-opacity duration-500"
                 style={{ background: 'conic-gradient(from 0deg, #6366f1, #8b5cf6, #06b6d4, #8b5cf6, #6366f1)', filter: 'blur(5px)' }} />
@@ -112,24 +96,9 @@ export default function Hero() {
                 <span className="text-[10px] font-bold text-emerald-400">Open to work</span>
               </div>
             </div>
-            <div className="flex gap-2 mt-3 flex-wrap justify-center">
-              {stats.slice(0, 2).map((s) => (
-                <div key={s.label} className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-white/[0.07] bg-white/[0.03]">
-                  <span className="text-sm font-black gradient-text">{s.value}</span>
-                  <span className="text-[10px] text-slate-600 font-medium">{s.label}</span>
-                </div>
-              ))}
-            </div>
           </motion.div>
 
           <div className="flex-1 text-center lg:text-left">
-            <motion.div {...fu(0.1)}
-              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold mb-5 border"
-              style={{ background: 'rgba(16,185,129,0.08)', borderColor: 'rgba(16,185,129,0.2)', color: '#6ee7b7' }}>
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              Available for New Opportunities
-            </motion.div>
-
             <motion.h1 {...fu(0.15)}
               className="font-black leading-[1.02] tracking-[-0.04em] text-white mb-4"
               style={{ fontSize: 'clamp(2.5rem, 7vw, 4.5rem)' }}>

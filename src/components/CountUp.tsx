@@ -18,12 +18,14 @@ function parseTarget(value: string): { num: number; suffix: string; isFloat: boo
 export default function CountUp({ value, className }: Props) {
   const ref = useRef<HTMLSpanElement>(null)
   const inView = useInView(ref, { once: true, margin: '-60px' })
-  const [displayed, setDisplayed] = useState('0')
+  // Start at the real value so crawlers, no-JS and screen readers never see "0"
+  const [displayed, setDisplayed] = useState(value)
   const started = useRef(false)
 
   useEffect(() => {
     if (!inView || started.current) return
     started.current = true
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
     const { num, suffix, isFloat } = parseTarget(value)
     const duration = 1600
     const steps = 50
@@ -47,5 +49,9 @@ export default function CountUp({ value, className }: Props) {
     return () => clearInterval(timer)
   }, [inView, value])
 
-  return <span ref={ref} className={className}>{displayed}</span>
+  return (
+    <span ref={ref} className={className} aria-label={value}>
+      <span aria-hidden>{displayed}</span>
+    </span>
+  )
 }

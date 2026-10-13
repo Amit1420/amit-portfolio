@@ -16,14 +16,23 @@ export default function HeroParticles() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-    let raf: number
+    // Decorative only: skip entirely for users who prefer reduced motion
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+    let raf = 0
+    let running = false
     let W = 0, H = 0
     const COLORS = ['rgba(99,102,241,', 'rgba(139,92,246,', 'rgba(6,182,212,']
     const COUNT = 35
 
+    // Scale the backing store by devicePixelRatio so dots stay crisp on Retina
     const resize = () => {
-      W = canvas.width = canvas.offsetWidth
-      H = canvas.height = canvas.offsetHeight
+      const dpr = window.devicePixelRatio || 1
+      W = canvas.offsetWidth
+      H = canvas.offsetHeight
+      canvas.width = W * dpr
+      canvas.height = H * dpr
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
     }
     resize()
     window.addEventListener('resize', resize)
@@ -57,12 +66,24 @@ export default function HeroParticles() {
         ctx.fillStyle = `${color}${p.opacity})`
         ctx.fill()
       })
-      raf = requestAnimationFrame(draw)
+      if (running) raf = requestAnimationFrame(draw)
     }
 
-    raf = requestAnimationFrame(draw)
+    const start = () => { if (!running) { running = true; raf = requestAnimationFrame(draw) } }
+    const stop = () => { running = false; cancelAnimationFrame(raf) }
+
+    // Pause when the hero is off-screen or the tab is hidden
+    let visible = true
+    const sync = () => (visible && !document.hidden ? start() : stop())
+    const observer = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; sync() })
+    observer.observe(canvas)
+    document.addEventListener('visibilitychange', sync)
+    sync()
+
     return () => {
-      cancelAnimationFrame(raf)
+      stop()
+      observer.disconnect()
+      document.removeEventListener('visibilitychange', sync)
       window.removeEventListener('resize', resize)
     }
   }, [])

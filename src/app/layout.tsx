@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
+import { profile, experiences, education } from "@/lib/data"
 import "./globals.css"
 import Navbar from "@/components/Navbar"
 import ScrollProgress from "@/components/ScrollProgress"
@@ -38,10 +39,33 @@ export const metadata: Metadata = {
   },
 }
 
+const SITE_URL = "https://amitk1420.vercel.app"
+
+// schema.org Person — lets search engines show a rich profile card
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: profile.name,
+  jobTitle: profile.title,
+  description: profile.tagline,
+  url: SITE_URL,
+  image: `${SITE_URL}/profile.jpeg`,
+  email: `mailto:${profile.email}`,
+  sameAs: [profile.linkedin],
+  worksFor: { "@type": "Organization", name: experiences[0].company },
+  alumniOf: { "@type": "CollegeOrUniversity", name: education.institution },
+  address: { "@type": "PostalAddress", addressLocality: "Patna", addressRegion: "Bihar", addressCountry: "IN" },
+  knowsAbout: ["SAP BTP", "SAP CAP", "Java", "Spring Boot", "Microservices", "SAP HANA Cloud", "OData V4", "AWS"],
+}
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={inter.variable}>
-      <body className="antialiased" style={{ background: '#050508', color: '#94a3b8', cursor: 'none' }}>
+      <body className="antialiased" style={{ background: '#050508', color: '#94a3b8' }}>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+        />
         <CustomCursor />
         <ScrollProgress />
         <Navbar />

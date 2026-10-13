@@ -2,17 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { profile, education } from '@/lib/data'
-import { GraduationCap, Briefcase, Award, MapPin, Mail, Phone } from 'lucide-react'
-
-function LinkedinIcon() {
-  return (
-    <svg width={16} height={16} viewBox="0 0 24 24" fill="currentColor">
-      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-      <rect x="2" y="9" width="4" height="12" />
-      <circle cx="4" cy="4" r="2" />
-    </svg>
-  )
-}
+import { GraduationCap, Briefcase, Award } from 'lucide-react'
 
 const fu = (delay = 0) => ({
   initial: { opacity: 0, y: 20 },
@@ -38,31 +28,7 @@ export default function About() {
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           <motion.div {...fu(0.1)}>
             <p className="text-slate-400 leading-[1.9] text-[0.95rem] mb-8">{profile.summary}</p>
-            <div className="space-y-2">
-              {[
-                { icon: <MapPin size={14} />, label: 'Location', value: profile.location, href: null },
-                { icon: <Mail size={14} />, label: 'Email', value: profile.email, href: `mailto:${profile.email}` },
-                { icon: <Phone size={14} />, label: 'Phone', value: profile.phone, href: `tel:${profile.phone}` },
-                { icon: <LinkedinIcon />, label: 'LinkedIn', value: profile.linkedin.replace('https://', ''), href: profile.linkedin, external: true },
-              ].map((row) => (
-                <div key={row.label}
-                  className="flex items-center gap-3 px-4 py-3 rounded-2xl border border-white/[0.05] bg-white/[0.02] hover:border-indigo-500/20 hover:bg-indigo-500/[0.03] transition-all group cursor-default">
-                  <div className="w-9 h-9 rounded-xl bg-indigo-500/10 flex items-center justify-center shrink-0 text-indigo-400 group-hover:bg-indigo-500/15 transition-colors">
-                    {row.icon}
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-[9px] font-bold text-slate-600 uppercase tracking-widest mb-0.5">{row.label}</p>
-                    {row.href ? (
-                      <a href={row.href} target={row.external ? '_blank' : undefined}
-                        rel={row.external ? 'noopener noreferrer' : undefined}
-                        className="text-sm text-slate-300 hover:text-indigo-300 transition-colors truncate block">{row.value}</a>
-                    ) : (
-                      <span className="text-sm text-slate-300 truncate block">{row.value}</span>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
+            <a href="#contact" className="btn-secondary">Get in Touch</a>
           </motion.div>
 
           <motion.div className="space-y-4" {...fu(0.2)}>

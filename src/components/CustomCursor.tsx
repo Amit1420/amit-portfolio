@@ -2,36 +2,34 @@
 
 import { useEffect, useRef, useState } from 'react'
 
+const INTERACTIVE = 'a, button, [role="button"]'
+
 export default function CustomCursor() {
   const dotRef = useRef<HTMLDivElement>(null)
   const ringRef = useRef<HTMLDivElement>(null)
-  const [isTouch, setIsTouch] = useState(true) // start hidden, reveal on mousemove
+  const [enabled, setEnabled] = useState(false)
 
+  // Only on precise pointers (mouse/trackpad) and when the user allows motion
   useEffect(() => {
-    // Hide on touch devices
-    const checkTouch = () => setIsTouch(true)
-    window.addEventListener('touchstart', checkTouch, { once: true, passive: true })
-
-    let activated = false
-    const onFirstMove = () => {
-      if (!activated) {
-        activated = true
-        setIsTouch(false)
-      }
-    }
-    window.addEventListener('mousemove', onFirstMove, { once: true, passive: true })
-
+    const fine = window.matchMedia('(pointer: fine)')
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const update = () => setEnabled(fine.matches && !reduced.matches)
+    update()
+    fine.addEventListener('change', update)
+    reduced.addEventListener('change', update)
     return () => {
-      window.removeEventListener('touchstart', checkTouch)
-      window.removeEventListener('mousemove', onFirstMove)
+      fine.removeEventListener('change', update)
+      reduced.removeEventListener('change', update)
     }
   }, [])
 
   useEffect(() => {
-    if (isTouch) return
+    if (!enabled) return
     const dot = dotRef.current
     const ring = ringRef.current
     if (!dot || !ring) return
+
+    document.documentElement.classList.add('custom-cursor')
 
     let mx = -100, my = -100
     let rx = -100, ry = -100
@@ -39,8 +37,10 @@ export default function CustomCursor() {
     let raf: number
 
     const onMove = (e: MouseEvent) => { mx = e.clientX; my = e.clientY }
-
-    const setHover = (v: boolean) => () => { hovering = v }
+    // Event delegation: one listener covers elements added later
+    const onOver = (e: MouseEvent) => {
+      hovering = !!(e.target as Element | null)?.closest?.(INTERACTIVE)
+    }
 
     const tick = () => {
       dot.style.transform = `translate(${mx - 4}px, ${my - 4}px)`
@@ -53,26 +53,19 @@ export default function CustomCursor() {
       raf = requestAnimationFrame(tick)
     }
 
-    const addListeners = () => {
-      document.querySelectorAll('a, button, [role="button"]').forEach(el => {
-        el.addEventListener('mouseenter', setHover(true))
-        el.addEventListener('mouseleave', setHover(false))
-      })
-    }
-
     window.addEventListener('mousemove', onMove, { passive: true })
-    addListeners()
+    document.addEventListener('mouseover', onOver, { passive: true })
     raf = requestAnimationFrame(tick)
-    const interval = setInterval(addListeners, 2000)
 
     return () => {
+      document.documentElement.classList.remove('custom-cursor')
       window.removeEventListener('mousemove', onMove)
+      document.removeEventListener('mouseover', onOver)
       cancelAnimationFrame(raf)
-      clearInterval(interval)
     }
-  }, [isTouch])
+  }, [enabled])
 
-  if (isTouch) return null
+  if (!enabled) return null
 
   return (
     <>
