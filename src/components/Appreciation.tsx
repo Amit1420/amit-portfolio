@@ -35,7 +35,8 @@ export default function Appreciation() {
 
           <div className="relative aspect-video bg-[#050508]">
             {!playing && (
-              <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-5 cursor-pointer group"
+              <button type="button" aria-label="Play appreciation video"
+                className="absolute inset-0 z-10 w-full flex flex-col items-center justify-center gap-5 cursor-pointer group"
                 style={{ background: 'linear-gradient(to bottom, rgba(5,5,8,0.3), rgba(5,5,8,0.7))' }}
                 onClick={() => setPlaying(true)}>
                 <div className="relative">
@@ -50,9 +51,9 @@ export default function Appreciation() {
                   <p className="text-base font-bold text-white mb-1">Play Appreciation Video</p>
                   <p className="text-xs text-slate-500">KIBA Labs · Employee of the Year Ceremony</p>
                 </div>
-              </div>
+              </button>
             )}
-            <video src="/amit-appreciation-1.mp4" controls={playing} autoPlay={playing}
+            <video src="/amit-appreciation-1.mp4" controls={playing} autoPlay={playing} preload="metadata" playsInline
               className="w-full h-full object-cover" onPlay={() => setPlaying(true)} />
           </div>
 

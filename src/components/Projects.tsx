@@ -93,7 +93,7 @@ export default function Projects() {
                   <p className="text-xs text-slate-500 mt-0.5 font-medium">{p.fullName}</p>
                 </div>
                 <span className="flex items-center gap-1 text-[10px] text-slate-600 shrink-0 mt-0.5">
-                  <Calendar size={10} />{p.period.split('–')[0].trim()}
+                  <Calendar size={10} />{p.period}
                 </span>
               </div>
               <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full mb-4 w-fit"

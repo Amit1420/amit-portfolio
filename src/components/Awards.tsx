@@ -5,6 +5,7 @@ import { useRef } from 'react'
 import { awards } from '@/lib/data'
 import { ExternalLink } from 'lucide-react'
 import Confetti from './Confetti'
+import LinkedinIcon from './LinkedinIcon'
 
 export default function Awards() {
   const sectionRef = useRef<HTMLDivElement>(null)
@@ -51,10 +52,7 @@ export default function Awards() {
                 {a.link && (
                   <div className="mt-5 pt-4 flex items-center gap-2 text-xs font-bold transition-colors duration-150"
                     style={{ borderTop: '1px solid rgba(255,255,255,0.06)', color: 'rgba(245,158,11,0.6)' }}>
-                    <svg width={13} height={13} viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
-                      <rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/>
-                    </svg>
+                    <LinkedinIcon size={13} />
                     View on LinkedIn →
                   </div>
                 )}

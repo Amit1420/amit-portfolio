@@ -139,18 +139,12 @@ const bad = {
 
 ## Lucide-React Quirk (v1.27)
 
-`Linkedin` is **not exported**. Use this inline SVG instead (already in Hero, Contact, Footer):
+`Linkedin` is **not exported**. Use the shared component instead of copying the SVG:
 
 ```tsx
-function LinkedinIcon({ size = 16 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
-      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-      <rect x="2" y="9" width="4" height="12" />
-      <circle cx="4" cy="4" r="2" />
-    </svg>
-  )
-}
+import LinkedinIcon from './LinkedinIcon'   // src/components/LinkedinIcon.tsx
+
+<LinkedinIcon size={14} />
 ```
 
 ---

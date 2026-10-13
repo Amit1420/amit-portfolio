@@ -20,7 +20,12 @@
 
 html { scroll-behavior: smooth; }
 body { background: var(--bg); color: var(--text-2); font-family: inherit; -webkit-font-smoothing: antialiased; }
-a, button, [role="button"] { cursor: none; }
+/* Native cursor hidden only once CustomCursor is active (fine pointer, motion allowed) */
+html.custom-cursor, html.custom-cursor * { cursor: none !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
 
 ::selection { background: rgba(99,102,241,0.35); color: #e2e8f0; }
 

@@ -1,15 +1,6 @@
+import LinkedinIcon from './LinkedinIcon'
 import { profile } from '@/lib/data'
 import { Mail } from 'lucide-react'
-
-function LinkedinIcon() {
-  return (
-    <svg width={15} height={15} viewBox="0 0 24 24" fill="currentColor">
-      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-      <rect x="2" y="9" width="4" height="12" />
-      <circle cx="4" cy="4" r="2" />
-    </svg>
-  )
-}
 
 export default function Footer() {
   return (
@@ -28,7 +19,7 @@ export default function Footer() {
         <div className="flex items-center gap-2">
           {[
             { href: `mailto:${profile.email}`, icon: <Mail size={14} />, label: 'Email' },
-            { href: profile.linkedin, icon: <LinkedinIcon />, label: 'LinkedIn', external: true },
+            { href: profile.linkedin, icon: <LinkedinIcon size={15} />, label: 'LinkedIn', external: true },
           ].map((l) => (
             <a key={l.label} href={l.href}
               target={l.external ? '_blank' : undefined}

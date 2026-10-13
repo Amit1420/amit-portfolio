@@ -1,24 +1,15 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import LinkedinIcon from './LinkedinIcon'
 import { profile } from '@/lib/data'
 import { Mail, Phone, MapPin, Send } from 'lucide-react'
-
-function LinkedinIcon() {
-  return (
-    <svg width={18} height={18} viewBox="0 0 24 24" fill="currentColor">
-      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-      <rect x="2" y="9" width="4" height="12" />
-      <circle cx="4" cy="4" r="2" />
-    </svg>
-  )
-}
 
 const contactItems = [
   { icon: <Mail size={17} />, label: 'Email', value: (p: typeof profile) => p.email, href: (p: typeof profile) => `mailto:${p.email}`, color: '#6366f1', bg: 'rgba(99,102,241,0.1)' },
   { icon: <Phone size={17} />, label: 'Phone', value: (p: typeof profile) => p.phone, href: (p: typeof profile) => `tel:${p.phone}`, color: '#8b5cf6', bg: 'rgba(139,92,246,0.1)' },
   { icon: <MapPin size={17} />, label: 'Location', value: (p: typeof profile) => p.location, href: null, color: '#06b6d4', bg: 'rgba(6,182,212,0.1)' },
-  { icon: <LinkedinIcon />, label: 'LinkedIn', value: (p: typeof profile) => p.linkedin.replace('https://', ''), href: (p: typeof profile) => p.linkedin, color: '#3b82f6', bg: 'rgba(59,130,246,0.1)', external: true },
+  { icon: <LinkedinIcon size={18} />, label: 'LinkedIn', value: (p: typeof profile) => p.linkedin.replace('https://', ''), href: (p: typeof profile) => p.linkedin, color: '#3b82f6', bg: 'rgba(59,130,246,0.1)', external: true },
 ]
 
 export default function Contact() {
@@ -49,7 +40,7 @@ export default function Contact() {
               const href = item.href ? item.href(profile) : null
               const value = item.value(profile)
               const inner = (
-                <div className="card p-4 flex items-center gap-4 group hover:border-indigo-500/30 cursor-pointer">
+                <div className={`card p-4 flex items-center gap-4 group ${href ? 'hover:border-indigo-500/30 cursor-pointer' : 'cursor-default'}`}>
                   <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 transition-all group-hover:scale-105"
                     style={{ background: item.bg, color: item.color }}>
                     {item.icon}
